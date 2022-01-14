@@ -1,0 +1,63 @@
+$square-size: 300px;
+$border-square: 30px;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #000;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.square {
+  position: relative;
+  width: $square-size;
+  height: $square-size;
+  perspective: 500px;
+}
+.square span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border: $border-square solid #333;
+  animation: animate linear infinite;
+  @for $i from 0 to 3 {
+    &:nth-child(#{$i + 1}) {
+      width: 100% - $i * 30%;
+      height: 100% - $i * 30%;
+      animation-duration: 6s - $i * 2s;
+    }
+  }
+  @mixin abc($x: top, $y: left) {
+    content: '';
+    #{$x}: -$border-square;
+    #{$y}: -$border-square;
+    position: absolute;
+    width: $border-square;
+    background-color: cyan;
+  }
+  &::before {
+    @include abc;
+    height: calc(50% + 30px);
+  }
+  &::after {
+    @include abc(right, bottom);
+    height: calc(50% + 30px);
+  }
+}
+@keyframes animate {
+  0% {
+    transform: translate(-50%, -50%) rotateY(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateY(360deg);
+  }
+}
